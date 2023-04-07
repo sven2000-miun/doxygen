@@ -1807,6 +1807,7 @@ void HtmlGenerator::docify_(const QCString &str,bool inHtmlComment)
         default:   m_t << c;
       }
     }
+    m_t << " AR: [" << str.get_checked() << "]";
   }
 }
 
