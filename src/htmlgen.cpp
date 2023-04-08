@@ -1807,7 +1807,6 @@ void HtmlGenerator::docify_(const QCString &str,bool inHtmlComment)
         default:   m_t << c;
       }
     }
-    m_t << " AR: [" << str.get_checked() << "]";
   }
 }
 
@@ -2144,6 +2143,7 @@ void HtmlGenerator::startMemberDoc( const QCString &/* clName */, const QCString
   m_t << "\n<h2 class=\"memtitle\">"
       << "<span class=\"permalink\"><a href=\"#" << anchor << "\">&#9670;&#160;</a></span>";
   docify(title);
+  docify(" AR: [ " + title.get_checked() + " ]");
   if (memTotal>1)
   {
     m_t << " <span class=\"overload\">[" << memCount << "/" << memTotal <<"]</span>";
@@ -2497,6 +2497,20 @@ void HtmlGenerator::startExamples()
 void HtmlGenerator::endExamples()
 {
   m_t << "</dl>\n";
+}
+
+void HtmlGenerator::startParamList(ParamListTypes,
+                                const QCString &title)
+{
+  m_t << "<dl><dt><b>";
+  docify(title);
+  docify(" AR: [ " + title.get_checked() + " ]");
+  m_t << "</b></dt>";
+}
+
+void HtmlGenerator::endParamList()
+{
+  m_t << "</dl>";
 }
 
 void HtmlGenerator::writeDoc(const IDocNodeAST *ast,const Definition *ctx,const MemberDef *,int id)
