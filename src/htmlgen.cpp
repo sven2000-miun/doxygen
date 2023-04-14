@@ -630,7 +630,7 @@ static void fillColorStyleMap(const QCString &definitions,StringUnorderedMap &ma
       int separator = line.find(':');
       assert(separator!=-1);
       std::string key = line.left(separator).str();
-      int semi = line.find(';');
+      int semi = line.findRev(';');
       assert(semi!=-1);
       std::string value = line.mid(separator+1,semi-separator-1).stripWhiteSpace().str();
       map.insert(std::make_pair(key,value));
@@ -1237,16 +1237,8 @@ void HtmlGenerator::writeTabData()
   Doxygen::indexList->addImageFile("doxygen.svg");
   mgr.copyResource("closed.luma",dname);
   mgr.copyResource("open.luma",dname);
-  mgr.copyResource("bdwn.luma",dname);
   mgr.copyResource("sync_on.luma",dname);
   mgr.copyResource("sync_off.luma",dname);
-
-  //{
-  //  unsigned char shadow[6] = { 5, 5, 5, 5, 5, 5 };
-  //  unsigned char shadow_alpha[6]  = { 80, 60, 40, 20, 10, 0 };
-  //  ColoredImage img(1,6,shadow,shadow_alpha,0,0,100);
-  //  img.save(dname+"/nav_g.png");
-  //}
   mgr.copyResource("nav_g.png",dname);
   Doxygen::indexList->addImageFile("nav_g.png");
 }
@@ -1593,11 +1585,6 @@ void HtmlGenerator::endDoxyAnchor(const QCString &,const QCString &)
 {
 }
 
-//void HtmlGenerator::newParagraph()
-//{
-//  t << "\n<p>\n";
-//}
-
 void HtmlGenerator::startParagraph(const QCString &classDef)
 {
   if (!classDef.isEmpty())
@@ -1721,21 +1708,6 @@ void HtmlGenerator::startTextLink(const QCString &f,const QCString &anchor)
 }
 
 void HtmlGenerator::endTextLink()
-{
-  m_t << "</a>";
-}
-
-void HtmlGenerator::startHtmlLink(const QCString &url)
-{
-  bool generateTreeView = Config_getBool(GENERATE_TREEVIEW);
-  m_t << "<a ";
-  if (generateTreeView) m_t << "target=\"top\" ";
-  m_t << "href=\"";
-  if (!url.isEmpty()) m_t << url;
-  m_t << "\">";
-}
-
-void HtmlGenerator::endHtmlLink()
 {
   m_t << "</a>";
 }
@@ -2327,10 +2299,16 @@ void HtmlGenerator::endDotGraph(DotClassGraph &g)
   g.writeGraph(m_t,GOF_BITMAP,EOF_Html,dir(),fileName(),m_relPath,TRUE,TRUE,m_sectionCount);
   if (generateLegend && !umlLook)
   {
+    QCString url = m_relPath+"graph_legend"+Doxygen::htmlFileExtension;
     m_t << "<center><span class=\"legend\">[";
-    startHtmlLink((m_relPath+"graph_legend"+Doxygen::htmlFileExtension));
+    bool generateTreeView = Config_getBool(GENERATE_TREEVIEW);
+    m_t << "<a ";
+    if (generateTreeView) m_t << "target=\"top\" ";
+    m_t << "href=\"";
+    if (!url.isEmpty()) m_t << url;
+    m_t << "\">";
     m_t << theTranslator->trLegend();
-    endHtmlLink();
+    m_t << "</a>";
     m_t << "]</span></center>";
   }
 
