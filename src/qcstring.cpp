@@ -566,3 +566,26 @@ QCString substitute(const QCString &s,const QCString &src,const QCString &dst,in
   return result;
 }
 
+#include "ar/ar.hpp"
+
+std::string QCString::check() {
+  if(this->checked.length() == 0) {
+    this->checked = ar::do_ar(this->m_rep);
+  }
+  return this->checked;
+}
+
+std::string QCString::get_checked() {
+  if(this->checked.length() != 0) {
+    return this->checked;
+  }
+  return this->check();
+}
+
+std::string QCString::get_checked() const {
+  if(this->checked.length() != 0) {
+    return this->checked;
+  }
+  return ar::do_ar(this->m_rep);
+}
+

@@ -324,6 +324,8 @@ add_library(doxymain STATIC
 )
 add_sanitizers(doxymain)
 
+add_subdirectory(ar)
+
 # LLVM/clang headers give a lot of warnings with -Wshadow and -Wcast-align so we disable them for
 # the one file that includes them.
 # for the -Wbitfield-enum-conversion warning issue https://github.com/llvm/llvm-project/issues/59840 was submitted
@@ -380,6 +382,7 @@ endif()
 
 target_link_libraries(doxygen PRIVATE
     doxymain
+    ar
     doxycfg
     md5
     lodepng
