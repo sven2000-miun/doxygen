@@ -1,0 +1,3 @@
+[submodule "src/ar"]
+	path = src/ar
+	url = git@github.com:sven2000-miun/ar
