@@ -2294,7 +2294,7 @@ static void writeAlphabeticalClassList(OutputList &ol, ClassDef::CompoundType ct
         }
 
         ol.writeObjectLink(cd->getReference(),
-            cd->getOutputFileBase(),cd->anchor(),cname);
+            cd->getOutputFileBase(),cd->anchor(),cname + " AR: [ " + cname.get_checked() + " ]");
         if (!namesp.isEmpty())
         {
           ol.writeString(" (");
